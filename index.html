@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>天汐香弓 リンク集</title>
+  <style>
+    :root {
+      /* ダークモード用カラーパレット */
+      --bg-gradient: radial-gradient(circle at top, #1e1b4b 0%, #0f172a 50%, #090d16 100%);
+      --text-main: #f8fafc;
+      --text-sub: #cbd5e1;
+      --card-bg: rgba(30, 41, 59, 0.65);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --tooltip-bg: rgba(15, 23, 42, 0.95);
+      --tooltip-border: rgba(255, 255, 255, 0.2);
+      --tooltip-text: #f8fafc;
+      --shadow-soft: 0 8px 24px -4px rgba(0, 0, 0, 0.5), 0 0 12px rgba(139, 92, 246, 0.15);
+      --shadow-hover: 0 12px 28px -2px rgba(0, 0, 0, 0.7), 0 0 20px rgba(192, 132, 252, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", sans-serif;
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: env(safe-area-inset-top, 24px) 16px env(safe-area-inset-bottom, 32px) 16px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* プロフィールヘッダー */
+    .profile-card {
+      width: 100%;
+      text-align: center;
+      padding: 24px 16px 12px;
+      position: relative;
+    }
+
+    .avatar-wrapper {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, #c084fc, #38bdf8, #f472b6);
+      box-shadow: 0 0 25px rgba(192, 132, 252, 0.4);
+      animation: floatA 6s ease-in-out infinite;
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #1e1b4b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+    }
+
+    .profile-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .profile-bio {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    .section-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #94a3b8;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+    }
+
+    /* リンクグリッド */
+    .links-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px 16px;
+      padding: 8px 4px;
+    }
+
+    /* 浮遊リンクアイテム */
+    .link-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-main);
+      position: relative;
+      /* 判定エリアを広めに確保 */
+      padding: 8px 4px;
+      touch-action: manipulation;
+    }
+
+    /* アイコンコンテナ（パステル丸・暗闇で映えるグロー効果） */
+    .icon-bubble {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: var(--shadow-soft);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+      overflow: visible;
+    }
+
+    .icon-bubble img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .icon-bubble svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    /* アイコン直下の短いラベル */
+    .link-label {
+      font-size: 0.76rem;
+      font-weight: 500;
+      text-align: center;
+      margin-top: 8px;
+      line-height: 1.3;
+      max-width: 96px;
+      word-break: break-word;
+      color: var(--text-main);
+      transition: color 0.2s;
+    }
+
+    /* 触れたときに出る詳細説明ツールチップ */
+    .tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background-color: var(--tooltip-bg);
+      border: 1px solid var(--tooltip-border);
+      color: var(--tooltip-text);
+      font-size: 0.75rem;
+      padding: 6px 12px;
+      border-radius: 10px;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      z-index: 100;
+      max-width: 200px;
+      text-align: center;
+      line-height: 1.35;
+      white-space: normal;
+    }
+
+    .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--tooltip-bg) transparent transparent transparent;
+    }
+
+    /* ホバー・タップ時の挙動 */
+    .link-item:hover .icon-bubble,
+    .link-item:active .icon-bubble,
+    .link-item:focus .icon-bubble {
+      transform: scale(1.1) !important;
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .link-item:hover,
+    .link-item:active,
+    .link-item:focus {
+      animation-play-state: paused !important;
+    }
+
+    .link-item:hover .tooltip,
+    .link-item:active .tooltip,
+    .link-item:focus .tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .link-item:hover .link-label {
+      color: #c084fc;
+    }
+
+    /* --- ふわふわアニメーション（ゆっくり・緩やか） --- */
+    @keyframes floatA {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(0.8deg); }
+    }
+    @keyframes floatB {
+      0%, 100% { transform: translateY(-2px) rotate(0deg); }
+      50% { transform: translateY(6px) rotate(-0.8deg); }
+    }
+    @keyframes floatC {
+      0%, 100% { transform: translateY(2px) rotate(0.5deg); }
+      50% { transform: translateY(-6px) rotate(-0.5deg); }
+    }
+    @keyframes floatD {
+      0%, 100% { transform: translateY(-4px) rotate(-0.5deg); }
+      50% { transform: translateY(4px) rotate(0.6deg); }
+    }
+
+    .float-1 { animation: floatA 5.6s ease-in-out infinite; }
+    .float-2 { animation: floatB 6.4s ease-in-out infinite 0.8s; }
+    .float-3 { animation: floatC 5.0s ease-in-out infinite 1.4s; }
+    .float-4 { animation: floatD 6.8s ease-in-out infinite 0.3s; }
+    .float-5 { animation: floatA 5.9s ease-in-out infinite 1.8s; }
+    .float-6 { animation: floatB 6.1s ease-in-out infinite 2.2s; }
+
+    /* パステルカラー定義（ダーク背景に映えるグロー調グラデーション） */
+    .bg-pastel-pink    { background: linear-gradient(135deg, #f472b6, #ec4899); box-shadow: 0 4px 15px rgba(236, 72, 153, 0.35); }
+    .bg-pastel-lavender{ background: linear-gradient(135deg, #c084fc, #a855f7); box-shadow: 0 4px 15px rgba(168, 85, 247, 0.35); }
+    .bg-pastel-blue    { background: linear-gradient(135deg, #38bdf8, #0ea5e9); box-shadow: 0 4px 15px rgba(14, 165, 233, 0.35); }
+    .bg-pastel-mint    { background: linear-gradient(135deg, #34d399, #10b981); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35); }
+    .bg-pastel-yellow  { background: linear-gradient(135deg, #facc15, #eab308); box-shadow: 0 4px 15px rgba(234, 179, 8, 0.35); }
+    .bg-pastel-peach   { background: linear-gradient(135deg, #fb923c, #f97316); box-shadow: 0 4px 15px rgba(249, 115, 22, 0.35); }
+    .bg-pastel-coral   { background: linear-gradient(135deg, #fb7185, #f43f5e); box-shadow: 0 4px 15px rgba(244, 63, 94, 0.35); }
+
+    /* フッター */
+    .footer {
+      width: 100%;
+      text-align: center;
+      padding: 20px 12px;
+      margin-top: 10px;
+    }
+
+    .amazon-notice {
+      display: inline-block;
+      padding: 14px 20px;
+      border-radius: 16px;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-soft);
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.84rem;
+      line-height: 1.5;
+      transition: all 0.25s ease;
+    }
+
+    .amazon-notice:hover, .amazon-notice:active {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: #fb923c;
+    }
+
+    .amazon-notice strong {
+      color: #fb923c;
+    }
+
+    .copyright {
+      font-size: 0.72rem;
+      color: #64748b;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- プロフィールヘッダー -->
+    <header class="profile-card">
+      <div class="avatar-wrapper">
+        <div class="avatar-img">🌸</div>
+      </div>
+      <h1 class="profile-name">天汐香弓</h1>
+      <p class="profile-bio">Official Link Collection</p>
+    </header>
+
+    <div class="section-title">Links &amp; Portfolio</div>
+
+    <!-- リンク一覧（3列グリッド配置） -->
+    <main class="links-grid">
+
+      <!-- 1. 著作権に関する考え方 -->
+      <a href="https://teshiokayumi.github.io/literarywork/" target="_blank" rel="noopener noreferrer" class="link-item float-1">
+        <div class="tooltip">著作権に関する考え方について</div>
+        <div class="icon-bubble bg-pastel-lavender">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M15 9.354a4 4 0 1 0 0 5.292"></path>
+          </svg>
+        </div>
+        <span class="link-label">著作権の考え方</span>
+      </a>
+
+      <!-- 2. 開発・創作に関するポートフォリオ -->
+      <a href="https://teshiokayumi.github.io/teshioportfolio/" target="_blank" rel="noopener noreferrer" class="link-item float-2">
+        <div class="tooltip">開発・創作に関するポートフォリオ</div>
+        <div class="icon-bubble bg-pastel-blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <span class="link-label">開発ポートフォリオ</span>
+      </a>
+
+      <!-- 3. クリエイターポートフォリオ -->
+      <a href="https://teshiokayumi.github.io/createportfolio/" target="_blank" rel="noopener noreferrer" class="link-item float-3">
+        <div class="tooltip">クリエイター向けポートフォリオ</div>
+        <div class="icon-bubble bg-pastel-pink">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+            <path d="M2 2l7.586 7.586"></path>
+            <circle cx="11" cy="11" r="2"></circle>
+          </svg>
+        </div>
+        <span class="link-label">クリエイターPF</span>
+      </a>
+
+      <!-- 4. YouTube（音楽・ショートアニメ） -->
+      <a href="https://www.youtube.com/@user-usuisioaji" target="_blank" rel="noopener noreferrer" class="link-item float-4">
+        <div class="tooltip">YouTube（音楽、ショートアニメ、ショートドラマ）</div>
+        <div class="icon-bubble bg-pastel-coral">
+          <svg viewBox="0 0 24 24" fill="#ffffff">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          </svg>
+        </div>
+        <span class="link-label">YouTube (創作)</span>
+      </a>
+
+      <!-- 5. てしおの教育ラボ -->
+      <a href="https://www.youtube.com/@edcafe_teshio" target="_blank" rel="noopener noreferrer" class="link-item float-5">
+        <div class="tooltip">YouTube てしおの教育ラボ</div>
+        <div class="icon-bubble bg-pastel-yellow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#713f12" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+        </div>
+        <span class="link-label">教育ラボ</span>
+      </a>
+
+      <!-- 6. シュガーテイルへようこそ＆Suger Tail公式サイト（sugertail.png） -->
+      <a href="https://teshiokayumi.github.io/sugertail/" target="_blank" rel="noopener noreferrer" class="link-item float-6">
+        <div class="tooltip">シュガーテイルへようこそ＆Suger Tail公式サイト</div>
+        <div class="icon-bubble bg-pastel-pink">
+          <img src="sugertail.png" alt="Suger Tail" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div style="display:none; font-size: 30px;">🐱</div>
+        </div>
+        <span class="link-label">Suger Tail</span>
+      </a>
+
+      <!-- 7. グッズ販売（SUZURI） -->
+      <a href="https://suzuri.jp/teshio_k" target="_blank" rel="noopener noreferrer" class="link-item float-1">
+        <div class="tooltip">グッズ販売（マステ、アルミケースなど）</div>
+        <div class="icon-bubble bg-pastel-mint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </div>
+        <span class="link-label">SUZURI (グッズ)</span>
+      </a>
+
+      <!-- 8. note -->
+      <a href="https://note.com/sugerpowder" target="_blank" rel="noopener noreferrer" class="link-item float-2">
+        <div class="tooltip">note（企業様案件ブログ、教育関係ブログ）</div>
+        <div class="icon-bubble bg-pastel-mint">
+          <svg viewBox="0 0 24 24" fill="#ffffff">
+            <path d="M20.2 4H3.8C2.8 4 2 4.8 2 5.8v12.4c0 1 .8 1.8 1.8 1.8h16.4c1 0 1.8-.8 1.8-1.8V5.8c0-1-.8-1.8-1.8-1.8zm-7.6 11.2h-3v-4.4l-1.8 1.8-1.2-1.2 3.8-3.8h2.2v7.6z"/>
+          </svg>
+        </div>
+        <span class="link-label">note</span>
+      </a>
+
+      <!-- 9. Qiita -->
+      <a href="https://qiita.com/iasou24" target="_blank" rel="noopener noreferrer" class="link-item float-3">
+        <div class="tooltip">Qiita（技術ブログ）</div>
+        <div class="icon-bubble bg-pastel-mint">
+          <span style="font-weight:900; font-size:1.4rem; color:#ffffff;">Q</span>
+        </div>
+        <span class="link-label">Qiita</span>
+      </a>
+
+      <!-- 10. Zenn -->
+      <a href="https://zenn.dev/teshio" target="_blank" rel="noopener noreferrer" class="link-item float-4">
+        <div class="tooltip">Zenn（技術ブログ）</div>
+        <div class="icon-bubble bg-pastel-blue">
+          <svg viewBox="0 0 24 24" fill="#ffffff">
+            <path d="M2.5 19.5h19v-2.3H6.8L19.3 5.4V3.1H2.5v2.3h12.5L2.5 17.2z"/>
+          </svg>
+        </div>
+        <span class="link-label">Zenn</span>
+      </a>
+
+      <!-- 11. Buddha Drawing -->
+      <a href="https://apps.apple.com/jp/app/id6670617978" target="_blank" rel="noopener noreferrer" class="link-item float-5">
+        <div class="tooltip">Buddha Drawing（イケメン仏像ドローイングアプリ）</div>
+        <div class="icon-bubble bg-pastel-yellow">
+          <span style="font-size: 30px;">🧘</span>
+        </div>
+        <span class="link-label">Buddha Drawing</span>
+      </a>
+
+      <!-- 12. X (旧Twitter) -->
+      <a href="https://x.com/teshio_k" target="_blank" rel="noopener noreferrer" class="link-item float-6">
+        <div class="tooltip">X (@teshio_k)</div>
+        <div class="icon-bubble bg-pastel-lavender">
+          <svg viewBox="0 0 24 24" fill="#ffffff">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </div>
+        <span class="link-label">X</span>
+      </a>
+
+      <!-- 13. BOOTH -->
+      <a href="https://musicbox00.booth.pm/" target="_blank" rel="noopener noreferrer" class="link-item float-1">
+        <div class="tooltip">BOOTH（ダウンロード同人誌＆ツール）</div>
+        <div class="icon-bubble bg-pastel-coral">
+          <svg viewBox="0 0 24 24" fill="#ffffff">
+            <path d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v2.28c-.6.35-1 .98-1 1.72v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-.74-.4-1.37-1-1.72zM5 5h14v2H5V5zm15 13H4V9h16v9z"/>
+          </svg>
+        </div>
+        <span class="link-label">BOOTH</span>
+      </a>
+
+      <!-- 14. TikTok（tiktok.png） -->
+      <a href="https://www.tiktok.com/@teshio7" target="_blank" rel="noopener noreferrer" class="link-item float-2">
+        <div class="tooltip">TikTok (@teshio7)</div>
+        <div class="icon-bubble bg-pastel-blue">
+          <img src="tiktok.png" alt="TikTok" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div style="display:none; font-size: 28px;">🎵</div>
+        </div>
+        <span class="link-label">TikTok</span>
+      </a>
+
+      <!-- 15. 小説「優しい鎮魂」（inori.png） -->
+      <a href="https://www.alphapolis.co.jp/novel/973378409/898827872" target="_blank" rel="noopener noreferrer" class="link-item float-3">
+        <div class="tooltip">小説「優しい鎮魂」（アルファポリス）</div>
+        <div class="icon-bubble bg-pastel-lavender">
+          <img src="inori.png" alt="優しい鎮魂" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div style="display:none; font-size: 28px;">🕊️</div>
+        </div>
+        <span class="link-label">優しい鎮魂</span>
+      </a>
+
+      <!-- 16. カクヨム（book.png） -->
+      <a href="https://kakuyomu.jp/users/teshiok" target="_blank" rel="noopener noreferrer" class="link-item float-4">
+        <div class="tooltip">カクヨム（赤にまつわる因習BL、部長好きになっちゃいけませんか？）</div>
+        <div class="icon-bubble bg-pastel-peach">
+          <img src="book.png" alt="カクヨム" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div style="display:none; font-size: 28px;">📖</div>
+        </div>
+        <span class="link-label">カクヨム</span>
+      </a>
+
+      <!-- 17. ネイルアートイラスト集（nail.png） -->
+      <a href="https://amzn.asia/d/hrQsf7B" target="_blank" rel="noopener noreferrer" class="link-item float-5">
+        <div class="tooltip">ネイルアートに関するキュートなイラスト集</div>
+        <div class="icon-bubble bg-pastel-pink">
+          <img src="nail.png" alt="ネイルアート" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div style="display:none; font-size: 28px;">💅</div>
+        </div>
+        <span class="link-label">ネイルイラスト集</span>
+      </a>
+
+      <!-- 18. 欲しいものリスト（list.png） -->
+      <a href="https://www.amazon.jp/hz/wishlist/ls/2GKLMDJXAZ7EV?ref_=wl_share" target="_blank" rel="noopener noreferrer" class="link-item float-6">
+        <div class="tooltip">Amazon 欲しいものリスト</div>
+        <div class="icon-bubble bg-pastel-yellow">
+          <img src="list.png" alt="欲しいものリスト" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div style="display:none; font-size: 28px;">🎁</div>
+        </div>
+        <span class="link-label">欲しいものリスト</span>
+      </a>
+
+      <!-- 19. メールフォーム（form.png） -->
+      <a href="https://forms.gle/no8izfW8DFftPr3t9" target="_blank" rel="noopener noreferrer" class="link-item float-1">
+        <div class="tooltip">Google メールフォーム</div>
+        <div class="icon-bubble bg-pastel-mint">
+          <img src="form.png" alt="メールフォーム" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div style="display:none; font-size: 28px;">📋</div>
+        </div>
+        <span class="link-label">メールフォーム</span>
+      </a>
+
+      <!-- 20. お問合せ先（mail.png） -->
+      <a href="mailto:iasou24@gmail.com" class="link-item float-2">
+        <div class="tooltip">メールでのお問合せ (iasou24@gmail.com)</div>
+        <div class="icon-bubble bg-pastel-lavender">
+          <img src="mail.png" alt="お問合せ" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div style="display:none; font-size: 28px;">✉️</div>
+        </div>
+        <span class="link-label">お問合せ</span>
+      </a>
+
+    </main>
+
+    <!-- フッター（Amazon検索案内 ＆ コピーライト） -->
+    <footer class="footer">
+      <a href="https://www.amazon.co.jp/s?k=%E5%A4%A9%E6%B1%90%E9%A6%99%E5%BC%93" target="_blank" rel="noopener noreferrer" class="amazon-notice">
+        📚 その他Amazonで販売中の書籍・漫画は<br>
+        <strong>「天汐香弓」</strong>で検索してね！
+      </a>
+      <p class="copyright">&copy; 天汐香弓 All Rights Reserved.</p>
+    </footer>
+  </div>
+
+</body>
+</html>
